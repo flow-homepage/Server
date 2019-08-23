@@ -3,3 +3,4 @@ const controllers = require('../controllers/api.controller');
 
 // weather
 router.get('/weather', controllers.getWeather);
+router.get('/background', controllers.getBackground);

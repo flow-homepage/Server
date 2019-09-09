@@ -19,7 +19,7 @@ const getBackground = (req, res) => {
     .get(
       `https://api.unsplash.com/photos/random/?client_id=${process.env.UNSPLASHKEY}&orientation=landscape&query=beach`
     )
-    .then(request => res.send(request.data.urls.regular))
+    .then(request => res.send(request.data))
     .catch(err => {
       console.log('Error happened during fetching!', err);
     });

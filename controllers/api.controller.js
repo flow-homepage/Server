@@ -21,7 +21,7 @@ const getBackground = (req, res) => {
     )
     .then(request => res.send(request.data))
     .catch(err => {
-      console.log('Error happened during fetching!', err);
+      console.error('Error happened during fetching!', err);
     });
 };
 module.exports = {

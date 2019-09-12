@@ -13,9 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', router);
 
-
 // error handler goes here
 
-app.listen(process.env.PORT || 5500, () => {
-  console.log(`Server listening on PORT ${process.env.PORT || 5500}`);
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`Server listening on PORT ${process.env.PORT || 5000}`);
 });

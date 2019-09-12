@@ -2,16 +2,19 @@ const axios = require('axios');
 
 /**
  * Darksky API call for current weather
- * @param {Object} req 
- * @param {Object} res 
+ * @param {Object} req
+ * @param {Object} res
  */
 const getWeather = (req, res) => {
-  axios.get(`https://api.darksky.net/forecast/${process.env.DARKSKYKEY}/34.0522,-118.2436`)
+  axios
+    .get(
+      `https://api.darksky.net/forecast/${process.env.DARKSKYKEY}/34.0522,-118.2436`
+    )
     .then(request => res.json(request.data.currently))
-  // todo: more robust error handling
+    // todo: more robust error handling
     .catch(err => console.error(err));
 };
 
 module.exports = {
-  getWeather
+  getWeather,
 };

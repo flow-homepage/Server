@@ -7,7 +7,7 @@ const axios = require('axios');
 const getWeather = (req, res) => {
   axios
     .get(
-      `https://api.darksky.net/forecast/${process.env.DARKSKYKEY}/34.0522,-118.2436`
+      `https://api.darksky.net/forecast/${process.env.DARKSKYKEY}/${req.params.lat},${req.params.lng}`
     )
     .then(request => res.json(request.data.currently))
     // TODO: more robust error handling

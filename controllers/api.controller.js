@@ -33,18 +33,38 @@ exports.getBackground = (req, res) => {
 
 exports.postUser = async (req, res) => {
   try {
-    await users.add(req.body);
-    return res.status(201).send();
+    const cookie = await users.add(req.body);
+    return res.status(201).send(cookie);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
   }
 };
 
-exports.getUserAuthentication = async (req, res) => {
+exports.postUserAuthentication = async (req, res) => {
   try {
-    const didAuthSucceed = await users.authenticate(req.body);
-    return res.status(201).send(didAuthSucceed);
+    const cookie = await users.authenticate(req.body);
+    return res.status(201).send(cookie);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+};
+
+exports.deleteSession = async (req, res) => {
+  try {
+    await users.logout(req.body);
+    return res.sendStatus(204);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+};
+
+exports.deleteAllSessions = async (req, res) => {
+  try {
+    await users.logoutAll(req.body);
+    return res.sendStatus(204);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');

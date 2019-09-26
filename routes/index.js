@@ -1,6 +1,5 @@
 const express = require('express');
 const controllers = require('../controllers/api.controller');
-const validate = require('../middleware/validate');
 
 const router = express.Router();
 
@@ -9,10 +8,8 @@ router.get('/', (req, res) => {
   res.send('Flow Server');
 });
 
-router.post('/api/users/signup', controllers.postUser);
-router.post('/api/users/login', controllers.postUserAuthentication);
-router.delete('/api/users/logout', validate, controllers.deleteSession);
-router.delete('/api/users/logout/all', validate, controllers.deleteAllSessions);
+router.post('/api/users', controllers.postUser);
+router.get('/api/users', controllers.getUserAuthentication);
 
 router.use('/api/weather', controllers.getWeather);
 router.use('/api/background', controllers.getBackground);

@@ -13,5 +13,6 @@ router.get('/api/users', controllers.getUserAuthentication);
 
 router.use('/api/weather', controllers.getWeather);
 router.use('/api/background', controllers.getBackground);
+router.use('/api/location', controllers.getLocation);
 
 module.exports = router;

@@ -8,8 +8,8 @@ const users = require('../models/users.model');
  * @param {Object} res
  */
 exports.getLocation = (req, res) => {
-  axios.get(`https://us1.locationiq.com/v1/reverse.php?key=${process.env.LOCATIONKEY}&lat=${req.params.lat}&lon=${req.params.lng}&format=json&addressdetails=1`)
-    .then(request => res.json(request.data))
+  axios.get(`https://us1.locationiq.com/v1/reverse.php?key=${process.env.LOCATIONKEY}&lat=${req.query.lat}&lon=${req.query.lng}&format=json&addressdetails=1`)
+    .then(request => res.json(request.data.address.city))
     .catch(err => {
       console.error(err);
       res.status(500).send('Server Error');
@@ -34,6 +34,11 @@ exports.getWeather = (req, res) => {
     });
 };
 
+/**
+ * API call for background images
+ * @param {Object} req
+ * @param {Object} res
+ */
 exports.getBackground = (req, res) => {
   axios
     .get(
@@ -46,6 +51,11 @@ exports.getBackground = (req, res) => {
     });
 };
 
+/**
+ * Create User
+ * @param {Object} req
+ * @param {Object} res
+ */
 exports.postUser = async (req, res) => {
   try {
     const cookie = await users.add(req.body);
@@ -56,6 +66,11 @@ exports.postUser = async (req, res) => {
   }
 };
 
+/**
+ * Create User Authentication
+ * @param {Object} req
+ * @param {Object} res
+ */
 exports.postUserAuthentication = async (req, res) => {
   try {
     const cookie = await users.authenticate(req.body);
@@ -66,6 +81,11 @@ exports.postUserAuthentication = async (req, res) => {
   }
 };
 
+/**
+ * Delete one user session
+ * @param {Object} req
+ * @param {Object} res
+ */
 exports.deleteSession = async (req, res) => {
   try {
     await users.logout(req.body);
@@ -76,6 +96,11 @@ exports.deleteSession = async (req, res) => {
   }
 };
 
+/**
+ * Delete all user sessions
+ * @param {Object} req
+ * @param {Object} res
+ */
 exports.deleteAllSessions = async (req, res) => {
   try {
     await users.logoutAll(req.body);

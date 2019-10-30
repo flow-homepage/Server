@@ -19,6 +19,7 @@ exports.add = async ({ email, password, first, last }) => {
   return cookie.rows[0].cookie;
 };
 
+
 exports.authenticate = async ({ email, password }) => {
   if (!email || !password) {
     throw new Error('Missing Required Parameters');

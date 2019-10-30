@@ -1,5 +1,14 @@
 const db = require('../db');
 
+/**
+ * Add a new user
+ * @param {Object} $0
+ * @param {string} $0.email - user email, this must be unique
+ * @param {string} $0.password - password
+ * @param {string} $0.first - first name
+ * @param {string} $0.last - last name
+ * @returns {string} - authentication token to be used on subsequent requests
+ */
 exports.add = async ({ email, password, first, last }) => {
   if (!email || !password) {
     throw new Error('Missing Required Parameters');
@@ -19,7 +28,13 @@ exports.add = async ({ email, password, first, last }) => {
   return cookie.rows[0].cookie;
 };
 
-
+/**
+ * Check to see if user has provided correct credentials to log in
+ * @param {Object} $0
+ * @param {string} $0.email - user email
+ * @param {string} $0.password - password
+ * @returns {string} - authentication token to be used on subsequent requests
+ */
 exports.authenticate = async ({ email, password }) => {
   if (!email || !password) {
     throw new Error('Missing Required Parameters');
@@ -54,6 +69,12 @@ exports.authenticate = async ({ email, password }) => {
   return false;
 };
 
+/**
+ * Logs user out from their current session
+ * @param {Object} $0
+ * @param {string} $0.cookie - authentication token for a session
+ * @returns {boolean} - true if logout was successful
+ */
 exports.logout = async ({ cookie }) => {
   if (!cookie) {
     throw new Error('Missing Required Parameters');
@@ -67,6 +88,12 @@ exports.logout = async ({ cookie }) => {
   return true;
 };
 
+/**
+ * Logs user out from all sessions across all devices
+ * @param {Object} $0
+ * @param {string} $0.cookie - authentication token for a single session
+ * @returns {boolean} - true if logout was successful
+ */
 exports.logoutAll = async ({ cookie }) => {
   if (!cookie) {
     throw new Error('Missing Required Parameters');
@@ -84,6 +111,11 @@ exports.logoutAll = async ({ cookie }) => {
   return true;
 };
 
+/**
+ * Logs user out from their current session
+ * @param {string} cookie - authentication token for a session
+ * @returns {boolean} - true if cookie is valid
+ */
 exports.verify = async cookie => {
   try {
     if (!cookie) {

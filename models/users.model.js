@@ -14,11 +14,18 @@ exports.add = async ({ email, password, first, last }) => {
     throw new Error('Missing Required Parameters');
   }
 
-  await db.query(
+  const userid = await db.query(
     `INSERT INTO users (email, password, first_name, last_name) VALUES
-    ($1, crypt($2, gen_salt('bf', 8)), $3, $4);`,
+    ($1, crypt($2, gen_salt('bf', 8)), $3, $4) RETURNING id;`,
     [email, password, first, last]
   );
+
+  const cookie = await db.query(
+    `INSERT INTO sessions (user_id) VALUES ($1) RETURNING (id || '-' || encode(hmac(id::text, key, 'sha256'), 'hex')) as cookie;`,
+    [userid.rows[0].id]
+  );
+
+  return cookie.rows[0].cookie;
 };
 
 /**

@@ -24,7 +24,7 @@ exports.getLocation = (req, res) => {
 exports.getWeather = (req, res) => {
   axios
     .get(
-      `https://api.darksky.net/forecast/${process.env.DARKSKYKEY}/34.0522,-118.2436`
+      `https://api.darksky.net/forecast/${process.env.DARKSKYKEY}/${req.params.lat},${req.params.lng}`
     )
     .then(request => res.json(request.data.currently))
     // TODO: more robust error handling
@@ -58,8 +58,8 @@ exports.getBackground = (req, res) => {
  */
 exports.postUser = async (req, res) => {
   try {
-    await users.add(req.body);
-    return res.status(201).send();
+    const cookie = await users.add(req.body);
+    return res.status(201).send(cookie);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
@@ -105,16 +105,6 @@ exports.deleteAllSessions = async (req, res) => {
   try {
     await users.logoutAll(req.body);
     return res.sendStatus(204);
-    
-/**
- * Get User Authentication
- * @param {Object} req
- * @param {Object} res
- */
-exports.getUserAuthentication = async (req, res) => {
-  try {
-    const didAuthSucceed = await users.authenticate(req.body);
-    return res.status(201).send(didAuthSucceed);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');

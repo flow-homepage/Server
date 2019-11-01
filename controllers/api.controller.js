@@ -1,6 +1,21 @@
 const axios = require('axios');
 const users = require('../models/users.model');
 
+
+/**
+ * Google Reverse Geocoding API call
+ * @param {Object} req
+ * @param {Object} res
+ */
+exports.getLocation = (req, res) => {
+  axios.get(`https://us1.locationiq.com/v1/reverse.php?key=${process.env.LOCATIONKEY}&lat=${req.query.lat}&lon=${req.query.lng}&format=json&addressdetails=1`)
+    .then(request => res.json(request.data.address.city))
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('Server Error');
+    });
+};
+
 /**
  * Darksky API call for current weather
  * @param {Object} req
@@ -9,7 +24,7 @@ const users = require('../models/users.model');
 exports.getWeather = (req, res) => {
   axios
     .get(
-      `https://api.darksky.net/forecast/${process.env.DARKSKYKEY}/34.0522,-118.2436`
+      `https://api.darksky.net/forecast/${process.env.DARKSKYKEY}/${req.params.lat},${req.params.lng}`
     )
     .then(request => res.json(request.data.currently))
     // TODO: more robust error handling
@@ -19,6 +34,11 @@ exports.getWeather = (req, res) => {
     });
 };
 
+/**
+ * API call for background images
+ * @param {Object} req
+ * @param {Object} res
+ */
 exports.getBackground = (req, res) => {
   axios
     .get(
@@ -31,20 +51,60 @@ exports.getBackground = (req, res) => {
     });
 };
 
+/**
+ * Create User
+ * @param {Object} req
+ * @param {Object} res
+ */
 exports.postUser = async (req, res) => {
   try {
-    await users.add(req.body);
-    return res.status(201).send();
+    const cookie = await users.add(req.body);
+    return res.status(201).send(cookie);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
   }
 };
 
-exports.getUserAuthentication = async (req, res) => {
+/**
+ * Create User Authentication
+ * @param {Object} req
+ * @param {Object} res
+ */
+exports.postUserAuthentication = async (req, res) => {
   try {
-    const didAuthSucceed = await users.authenticate(req.body);
-    return res.status(201).send(didAuthSucceed);
+    const cookie = await users.authenticate(req.body);
+    return res.status(201).send(cookie);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+};
+
+/**
+ * Delete one user session
+ * @param {Object} req
+ * @param {Object} res
+ */
+exports.deleteSession = async (req, res) => {
+  try {
+    await users.logout(req.body);
+    return res.sendStatus(204);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+};
+
+/**
+ * Delete all user sessions
+ * @param {Object} req
+ * @param {Object} res
+ */
+exports.deleteAllSessions = async (req, res) => {
+  try {
+    await users.logoutAll(req.body);
+    return res.sendStatus(204);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');

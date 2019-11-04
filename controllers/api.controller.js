@@ -24,7 +24,7 @@ exports.getLocation = (req, res) => {
 exports.getWeather = (req, res) => {
   axios
     .get(
-      `https://api.darksky.net/forecast/${process.env.DARKSKYKEY}/${req.params.lat},${req.params.lng}`
+      `https://api.darksky.net/forecast/${process.env.DARKSKYKEY}/${req.query.lat},${req.query.lng}`
     )
     .then(request => res.json(request.data.currently))
     // TODO: more robust error handling
